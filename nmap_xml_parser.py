@@ -156,7 +156,7 @@ def print_web_ports(data):
     # http and https port numbers came from experience as well as
     # searching for http on th following website:
     # https://en.wikipedia.org/wiki/List_of_TCP_and_UDP_port_numbers
-    http_port_list = ['80', '280', '81', '591', '593', '2080', '2480', '3080', 
+    """http_port_list = ['80', '280', '81', '591', '593', '2080', '2480', '3080', 
                       '4080', '4567', '5080', '5104', '5800', '6080',
                       '7001', '7080', '7777', '8000', '8008', '8042', '8080',
                       '8081', '8082', '8088', '8180', '8222', '8280', '8281',
@@ -171,9 +171,29 @@ def print_web_ports(data):
         elif port in http_port_list:
             print("http://{}:{}".format(ip, port))
         else:
-            continue    
+            continue"""    
+    #Another way to do it based on http service
+    http_service_list = ['http', 'https','http-proxy']
+    for item in data:
+        try:
+            try: 
+               ip = item[0] 
+               port = item [4]
+               service = item [5]
+            except IndexError as e:
+               print("There might be some host with empty Service:", e)
+               #raise
+               #print ("IP={}, Port={}, Service={}".format(ip,port,service))
+            if service in http_service_list[0]:
+               print("http://{}:{}".format(ip,port))
+            elif service in http_service_list[1]:
+               print("https://{}:{}".format(ip,port))
+            elif service in http_service_list[2]:
+               print("\t\tProxy http://{}:{}".format(ip,port))
+        except IndexError as e:
+           print("Something's Wrong in XML ", e)
+           raise
     
-        
 def least_common_ports(data, n):
     """Examines the port index from data and prints the least common ports."""
     c = Counter()
